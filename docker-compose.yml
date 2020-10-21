@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  app:
+    image: django
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+
+    volumes:
+        - ./app/:/app/
+
+    command: gunicorn --bind 0.0.0.0:8000 --chdir /app/ app.wsgi
+  
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - app
